@@ -5,6 +5,7 @@ import 'package:todo_list_app/screens/task_details_screen.dart';
 import 'package:todo_list_app/widgets/task_item.dart';
 import 'package:todo_list_app/screens/add_task_screen.dart';
 import 'package:todo_list_app/models/user.dart';
+import 'package:todo_list_app/screens/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final User? user;
@@ -70,6 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()), // Replace with your login screen
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,6 +96,15 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat, // Center the floating action button
+      appBar: AppBar(
+        title: Text('Home'),
+        actions: [
+          IconButton(
+            onPressed: _logout,
+            icon: Icon(Icons.logout),
+          ),
+        ],
+      ),
     );
   }
 }
