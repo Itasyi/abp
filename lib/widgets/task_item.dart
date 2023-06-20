@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/models/task.dart';
+import 'package:todo_list_app/models/user_task.dart';
 
 class TaskItem extends StatelessWidget {
-  final Task task;
+  final UserTask task;
   final Function(bool?) onChanged;
   final VoidCallback onTap;
 

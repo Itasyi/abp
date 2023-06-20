@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list_app/database/database_helper.dart';
-import 'package:todo_list_app/models/task.dart';
+import 'package:todo_list_app/models/user_task.dart';
 import 'package:todo_list_app/screens/task_details_screen.dart';
 import 'package:todo_list_app/widgets/task_item.dart';
 
 class TaskDetailsScreen extends StatefulWidget {
-  final Task task;
+  final UserTask task;
 
   TaskDetailsScreen({required this.task});
 
@@ -39,14 +39,14 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   void _saveChanges() async {
-    final updatedTask = Task(
+    final updatedTask = UserTask(
       id: widget.task.id,
       title: _titleController.text,
       description: _descriptionController.text,
       isDone: widget.task.isDone,
     );
 
-    await DatabaseHelper.instance.updateTask(updatedTask);
+    await DatabaseHelper.instance.updateUserTask(updatedTask);
 
     setState(() {
       widget.task.title = _titleController.text;
@@ -56,7 +56,8 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
   }
 
   void _deleteTask() async {
-    await DatabaseHelper.instance.deleteTask(widget.task.id);
+    final taskId = widget.task.id ?? 0; // Use 0 as the default value if widget.task.id is null
+    await DatabaseHelper.instance.deleteUserTask(taskId);
     Navigator.pop(context); // Navigate back to the previous screen
   }
 

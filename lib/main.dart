@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list_app/screens/home_screen.dart';
+import 'package:todo_list_app/screens/login_screen.dart';
 
 void main() {
   runApp(TodoListApp());
@@ -13,7 +13,7 @@ class TodoListApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(),
+      home: LoginScreen(), // Set LoginScreen as the home screen
     );
   }
 }

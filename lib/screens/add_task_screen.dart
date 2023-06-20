@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_list_app/database/database_helper.dart';
-import 'package:todo_list_app/models/task.dart';
+import 'package:todo_list_app/models/user_task.dart';
 
 class AddTaskScreen extends StatefulWidget {
   @override
@@ -53,14 +53,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     final description = _descriptionController.text;
 
     if (title.isNotEmpty) {
-      final newTask = Task(
+      final newUserTask = UserTask(
         id: 0, // The actual ID will be assigned by the database
+        userId: 0, // Replace with the actual userId
         title: title,
         description: description,
         isDone: false,
       );
 
-      await DatabaseHelper.instance.insertTask(newTask);
+      await DatabaseHelper.instance.insertUserTask(newUserTask);
 
       Navigator.pop(context);
     }
