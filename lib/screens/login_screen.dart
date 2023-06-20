@@ -53,6 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _resetDatabase() async {
+    final dbHelper = DatabaseHelper.instance;
+    await dbHelper.resetDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 'Sign Up',
                 style: TextStyle(color: Colors.white),
               ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _resetDatabase,
+              child: Text('Reset Database'),
+              style: ElevatedButton.styleFrom(primary: Colors.red), // Set button color to red
             ),
           ],
         ),

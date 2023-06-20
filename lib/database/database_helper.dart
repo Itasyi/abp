@@ -1,9 +1,5 @@
-import 'dart:io';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:flutter/services.dart' show rootBundle;
-
+import 'package:path/path.dart';
 import 'package:todo_list_app/models/user.dart';
 import 'package:todo_list_app/models/user_task.dart';
 
@@ -11,9 +7,7 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
   static Database? _database;
 
-  DatabaseHelper._init() {
-    sqfliteFfiInit();
-  }
+  DatabaseHelper._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -28,34 +22,46 @@ class DatabaseHelper {
 
     final bool isDatabaseExists = await databaseExists(path);
     if (!isDatabaseExists) {
-      // If the database doesn't exist, copy it from the assets folder
-      ByteData data = await rootBundle.load(join("assets", "todo.db"));
-      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-      await File(path).writeAsBytes(bytes);
+      // If the database doesn't exist, create it and initialize the schema
+      await openDatabase(path, version: 1, onCreate: _createDB);
     }
 
-    return openDatabase(path, version: 1, onCreate: _createDB);
+    return openDatabase(path, version: 1);
   }
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        email TEXT,
-        password TEXT
-      )
-    ''');
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT,
+      email TEXT,
+      password TEXT
+    )
+  ''');
 
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS user_tasks (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        userId INTEGER,
-        title TEXT,
-        description TEXT,
-        isDone INTEGER
-      )
-    ''');
+    CREATE TABLE IF NOT EXISTS user_tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER,
+      title TEXT,
+      description TEXT,
+      isDone INTEGER
+    )
+  ''');
+  }
+
+  Future<List<UserTask>> getUserTasksByUserId(int userId) async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      'user_tasks',
+      where: 'userId = ?',
+      whereArgs: [userId],
+    );
+
+    return List.generate(maps.length, (index) {
+      return UserTask.fromMap(maps[index]);
+    });
   }
 
   Future<List<UserTask>> getUserTasks() async {
@@ -115,12 +121,21 @@ class DatabaseHelper {
 
   Future<User> insertUser(User user) async {
     final db = await instance.database;
-    final id = await db.insert('users', user.toMap());
+    final id = await db.insert('users', user.toMap()); // ERROR HERE...
     return User(
       id: id,
       username: user.username,
       email: user.email,
       password: user.password,
     );
+  }
+
+  Future<void> resetDatabase() async {
+    final db = await instance.database;
+
+    await db.execute('DROP TABLE IF EXISTS users');
+    await db.execute('DROP TABLE IF EXISTS user_tasks');
+
+    await _createDB(db, 1);
   }
 }
