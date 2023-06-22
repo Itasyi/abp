@@ -54,8 +54,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
     if (title.isNotEmpty) {
       final newUserTask = UserTask(
-        id: 0, // The actual ID will be assigned by the database
-        userId: 0, // Replace with the actual userId
+        id: 0,
+        userId: 0,
         title: title,
         description: description,
         isDone: false,

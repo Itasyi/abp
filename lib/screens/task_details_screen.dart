@@ -86,7 +86,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
               'Title',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20, // Adjust the font size as needed
+                fontSize: 20, 
               ),
             ),
             SizedBox(height: 8),
@@ -94,14 +94,14 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 ? TextField(controller: _titleController)
                 : Text(
               widget.task.title,
-              style: TextStyle(fontSize: 18), // Adjust the font size as needed
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 16),
             Text(
               'Description',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 20, // Adjust the font size as needed
+                fontSize: 20,
               ),
             ),
             SizedBox(height: 8),
@@ -109,7 +109,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 ? TextField(controller: _descriptionController)
                 : Text(
               widget.task.description,
-              style: TextStyle(fontSize: 18), // Adjust the font size as needed
+              style: TextStyle(fontSize: 18),
             ),
           ],
         ),
